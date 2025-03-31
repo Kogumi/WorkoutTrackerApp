@@ -1,4 +1,4 @@
-package com.example.myworkoutprogressapp.planner.domain.useCases.planCases
+package com.example.myworkoutprogressapp.planner.domain.useCases.workoutPlanCases
 
 class WorkoutPlanUseCases(
     val workoutPlanCrud: WorkoutPlanCrud,

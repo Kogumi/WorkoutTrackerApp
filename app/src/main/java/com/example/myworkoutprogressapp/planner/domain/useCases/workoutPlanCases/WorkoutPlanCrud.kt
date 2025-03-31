@@ -1,6 +1,6 @@
-package com.example.myworkoutprogressapp.planner.domain.useCases.planCases
+package com.example.myworkoutprogressapp.planner.domain.useCases.workoutPlanCases
 
-import com.example.myworkoutprogressapp.planner.data.WorkoutPlanRepository
+import com.example.myworkoutprogressapp.planner.data.repositories.WorkoutPlanRepository
 import com.example.myworkoutprogressapp.planner.domain.exceptions.InvalidPlanException
 import com.example.myworkoutprogressapp.planner.domain.model.WorkoutPlan
 import kotlinx.coroutines.flow.Flow

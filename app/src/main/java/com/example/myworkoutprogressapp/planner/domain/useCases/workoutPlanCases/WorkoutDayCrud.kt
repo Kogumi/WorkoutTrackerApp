@@ -1,8 +1,9 @@
-package com.example.myworkoutprogressapp.planner.domain.useCases.planCases
+package com.example.myworkoutprogressapp.planner.domain.useCases.workoutPlanCases
 
-import com.example.myworkoutprogressapp.planner.data.WorkoutPlanRepository
+import com.example.myworkoutprogressapp.planner.data.repositories.WorkoutPlanRepository
 import com.example.myworkoutprogressapp.planner.domain.exceptions.InvalidDayException
 import com.example.myworkoutprogressapp.planner.domain.model.WorkoutDay
+import com.example.myworkoutprogressapp.planner.domain.model.WorkoutPlanWithDays
 import kotlinx.coroutines.flow.Flow
 
 class WorkoutDayCrud(
@@ -28,7 +29,7 @@ class WorkoutDayCrud(
         repository.deleteDay(day)
     }
 
-    fun getDays(planId: Long): Flow<List<WorkoutDay>>{
+    fun getDays(planId: Long): Flow<WorkoutPlanWithDays>{
         return repository.getDaysInPlan(planId)
     }
 

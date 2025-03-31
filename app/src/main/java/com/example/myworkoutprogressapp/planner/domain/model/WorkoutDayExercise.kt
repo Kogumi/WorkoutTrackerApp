@@ -13,35 +13,26 @@ import androidx.room.Relation
     foreignKeys = [
         ForeignKey(entity =
             WorkoutDay::class,
-            parentColumns = ["id"],
+            parentColumns = ["workoutDayId"],
             childColumns = ["workoutDayId"],
             onDelete = CASCADE),
         ForeignKey(entity = Exercise::class,
-            parentColumns = ["id"],
+            parentColumns = ["exerciseId"],
             childColumns = ["exerciseId"])
     ],
     indices = [Index("workoutDayId"), Index("exerciseId")])
+
 data class WorkoutDayExercise(
     val workoutDayId: Long,
     val exerciseId: Long,
-    val exerciseName: String
 )
 
-data class ExerciseWithSets(
-    @Embedded val dayExercise: WorkoutDayExercise,
-    @Relation(
-        parentColumn = "exerciseId",
-        entityColumn = "id"
-    )
-    val exercise: Exercise,
+data class DaywithExercises(
+    @Embedded val day: WorkoutDay,
     @Relation(
         parentColumn = "workoutDayId",
-        entityColumn = "workoutDayId",
-        associateBy = Junction(
-            value = WorkoutSet::class,
-            parentColumn = "workoutDayId",
-            entityColumn = "exerciseId"
-        )
+        entityColumn = "exerciseId",
+        associateBy = Junction(WorkoutDayExercise::class)
     )
-    val sets: List<WorkoutSet>
+    val exercises: List<Exercise>
 )

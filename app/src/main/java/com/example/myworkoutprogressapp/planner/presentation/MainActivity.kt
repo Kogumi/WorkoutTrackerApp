@@ -12,6 +12,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.myworkoutprogressapp.planner.presentation.dayScreen.DayScreen
+import com.example.myworkoutprogressapp.planner.presentation.dayScreen.DayViewModel
 import com.example.myworkoutprogressapp.planner.presentation.planScreen.PlanScreen
 import com.example.myworkoutprogressapp.planner.presentation.planScreen.PlanViewModel
 import com.example.myworkoutprogressapp.planner.presentation.util.Screen
@@ -31,7 +33,7 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         startDestination = Screen.PlansScreen.route
                     ){
-                        composable(route = Screen.PlansScreen.route){ backStackEntry ->
+                        composable(route = Screen.PlansScreen.route){
                             val viewModel = hiltViewModel<PlanViewModel>()
                             PlanScreen(navController = navController,
                                 viewModel = viewModel)
@@ -48,6 +50,9 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         ){
+                            val viewModel = hiltViewModel<DayViewModel>()
+                            DayScreen(navController = navController,
+                                viewModel = viewModel)
                         }
                     }
                 }

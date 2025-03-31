@@ -1,8 +1,9 @@
-package com.example.myworkoutprogressapp.planner.data
+package com.example.myworkoutprogressapp.planner.data.repositories
 
 import com.example.myworkoutprogressapp.planner.data.data_source.WorkoutPlanDao
 import com.example.myworkoutprogressapp.planner.domain.model.WorkoutDay
 import com.example.myworkoutprogressapp.planner.domain.model.WorkoutPlan
+import com.example.myworkoutprogressapp.planner.domain.model.WorkoutPlanWithDays
 import kotlinx.coroutines.flow.Flow
 
 class WorkoutPlanRepository(
@@ -30,8 +31,8 @@ class WorkoutPlanRepository(
     fun getPlans(): Flow<List<WorkoutPlan>>{
         return planDao.getPlans()
     }
-    fun getDaysInPlan(planId: Long): Flow<List<WorkoutDay>>{
-        return planDao.getDaysInPlan(planId = planId)
+    fun getDaysInPlan(planId: Long): Flow<WorkoutPlanWithDays>{
+        return planDao.getPlanWithDays(planId = planId)
     }
 
 

@@ -4,9 +4,11 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.example.myworkoutprogressapp.planner.domain.model.WorkoutDay
 import com.example.myworkoutprogressapp.planner.domain.model.WorkoutPlan
+import com.example.myworkoutprogressapp.planner.domain.model.WorkoutPlanWithDays
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -32,6 +34,7 @@ interface WorkoutPlanDao {
     @Query("SELECT * FROM workout_plans")
     fun getPlans(): Flow<List<WorkoutPlan>>
 
-    @Query("SELECT * FROM workout_days WHERE planId = :planId")
-    fun getDaysInPlan(planId: Long): Flow<List<WorkoutDay>>
+    @Transaction
+    @Query("SELECT * FROM workout_plans WHERE id = :planId")
+    fun getPlanWithDays(planId: Long): Flow<WorkoutPlanWithDays>
 }

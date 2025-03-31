@@ -16,12 +16,12 @@ import com.example.myworkoutprogressapp.planner.domain.model.WorkoutSet
     WorkoutPlan::class,
     WorkoutDayExercise::class,
     WorkoutSet::class
-], version = 1,
+], version = 2,
     exportSchema = false)
 abstract class WorkoutDatabase: RoomDatabase() {
     companion object{
         const val DATABASE_NAME = "workout_db"
     }
     abstract fun workoutPlanDao(): WorkoutPlanDao
-    abstract fun workoutRoutineDao(): WorkoutRoutineDao
+    abstract fun workoutRoutineDao(): ExerciseDao
 }

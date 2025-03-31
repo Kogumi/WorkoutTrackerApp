@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myworkoutprogressapp.planner.domain.model.WorkoutPlan
-import com.example.myworkoutprogressapp.planner.domain.useCases.planCases.WorkoutPlanUseCases
+import com.example.myworkoutprogressapp.planner.domain.useCases.workoutPlanCases.WorkoutPlanUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,25 +21,20 @@ class PlanViewModel @Inject constructor(
 
     var planName = mutableStateOf("")
         private set
+    private var editedPlan: WorkoutPlan? = null
+
     var isEditDialogVisible = mutableStateOf(false)
         private set
     var isDeleteDialogVisible = mutableStateOf(false)
         private set
     var isCreateDialogVisible = mutableStateOf(false)
+        private set
 
 
     init{
-        getPlans()
-    }
-
-
-    private fun getPlans(){
         viewModelScope.launch {
             planUseCases.workoutPlanCrud.getPlans()
-                .collect{
-                    notes ->
-                        _plansFlow.value = notes
-                }
+                .collect{ notes -> _plansFlow.value = notes }
         }
     }
 
@@ -53,6 +48,22 @@ class PlanViewModel @Inject constructor(
                     planUseCases.workoutPlanCrud.deletePlan(event.plan)
                 }
             }
+            is PlanEvent.EditPlan -> {
+                editedPlan?.let { plan ->
+                    val newPlan = plan.copy(
+                        name = planName.value
+                    )
+                    viewModelScope.launch {
+                        planUseCases.workoutPlanCrud.updatePlan(newPlan)
+                    }
+                }
+                editedPlan = null
+            }
+            is PlanEvent.InvokeEdit -> {
+                planName.value = event.plan.name
+                editedPlan = event.plan
+                isEditDialogVisible.value = true
+            }
             is PlanEvent.AddPlan -> {
                 val newPlan = WorkoutPlan(
                     name = planName.value
@@ -60,9 +71,12 @@ class PlanViewModel @Inject constructor(
                 viewModelScope.launch {
                     planUseCases.workoutPlanCrud.addPlan(newPlan)
                 }
+                planName.value = ""
 
             }
-            is PlanEvent.DismissCreate -> {
+            is PlanEvent.DismissDialog -> {
+                isDeleteDialogVisible.value = false
+                isEditDialogVisible.value = false
                 isCreateDialogVisible.value = false
             }
             is PlanEvent.InvokeCreate -> {

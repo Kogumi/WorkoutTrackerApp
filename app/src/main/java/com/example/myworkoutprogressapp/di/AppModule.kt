@@ -2,11 +2,12 @@ package com.example.myworkoutprogressapp.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.myworkoutprogressapp.planner.data.WorkoutPlanRepository
+import com.example.myworkoutprogressapp.planner.data.repositories.WorkoutPlanRepository
 import com.example.myworkoutprogressapp.planner.data.data_source.WorkoutDatabase
-import com.example.myworkoutprogressapp.planner.domain.useCases.planCases.WorkoutPlanCrud
-import com.example.myworkoutprogressapp.planner.domain.useCases.planCases.WorkoutDayCrud
-import com.example.myworkoutprogressapp.planner.domain.useCases.planCases.WorkoutPlanUseCases
+import com.example.myworkoutprogressapp.planner.data.repositories.ExerciseRepository
+import com.example.myworkoutprogressapp.planner.domain.useCases.workoutPlanCases.WorkoutPlanCrud
+import com.example.myworkoutprogressapp.planner.domain.useCases.workoutPlanCases.WorkoutDayCrud
+import com.example.myworkoutprogressapp.planner.domain.useCases.workoutPlanCases.WorkoutPlanUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,12 +25,13 @@ class AppModule {
             app,
             WorkoutDatabase::class.java,
             WorkoutDatabase.DATABASE_NAME
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides
     @Singleton
-    fun provideWorkoutRoutineRepository(db: WorkoutDatabase): WorkoutPlanRepository{
+    fun provideWorkoutRoutineRepository(db: WorkoutDatabase): WorkoutPlanRepository {
         return WorkoutPlanRepository(db.workoutPlanDao())
     }
 
@@ -41,4 +43,5 @@ class AppModule {
             WorkoutDayCrud(repository)
         )
     }
+
 }
