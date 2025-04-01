@@ -27,12 +27,14 @@ data class WorkoutDayExercise(
     val exerciseId: Long,
 )
 
-data class DaywithExercises(
-    @Embedded val day: WorkoutDay,
+data class DayWithExercises(
+    @Embedded val day: WorkoutDay = WorkoutDay(),
     @Relation(
         parentColumn = "workoutDayId",
         entityColumn = "exerciseId",
-        associateBy = Junction(WorkoutDayExercise::class)
+        associateBy = Junction(WorkoutDayExercise::class,
+            parentColumn = "workoutDayId",
+            entityColumn = "exerciseId")
     )
-    val exercises: List<Exercise>
+    val exercises: List<Exercise> = emptyList()
 )

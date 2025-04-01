@@ -1,11 +1,8 @@
 package com.example.myworkoutprogressapp.planner.presentation.planScreen
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -23,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.myworkoutprogressapp.planner.presentation.components.CreationEditDialog
-import com.example.myworkoutprogressapp.planner.presentation.components.ListElement
+import com.example.myworkoutprogressapp.planner.presentation.components.GenericLazyList
 import com.example.myworkoutprogressapp.planner.presentation.util.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,24 +87,21 @@ fun PlanScreen(
                                     viewModel.onEvent(PlanEvent.DismissDialog)}
             )
         }
-        LazyColumn(modifier = Modifier.padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            items(planList.value) { workoutPlan ->
-               ListElement(
-                   text = workoutPlan.name,
-                   id = workoutPlan.id,
-                   onDelete = {
-                       viewModel.onEvent(PlanEvent.DeletePlan(workoutPlan))
-                   },
-                   onEdit = {
-                       viewModel.onEvent(PlanEvent.InvokeEdit(workoutPlan))
-                   },
-                   onClick = {
-                       navController.navigate(Screen.DaysScreen.route + "?planId=${workoutPlan.id}")
-                   }
-               )
-           }
-       }
+        GenericLazyList(
+            modifier = Modifier.padding(innerPadding),
+            items = planList.value,
+            onDelete = { workoutPlan ->
+                viewModel.onEvent(PlanEvent.DeletePlan(workoutPlan))
+            },
+            onEdit = { workoutPlan ->
+                viewModel.onEvent(PlanEvent.InvokeEdit(workoutPlan))
+            },
+            onClick = { workoutPlan ->
+                navController.navigate(Screen.DaysScreen.route + "/${workoutPlan.id}")
+            },
+            getName = { it.name },
+            getId = { it.id }
+        )
     }
 }
 

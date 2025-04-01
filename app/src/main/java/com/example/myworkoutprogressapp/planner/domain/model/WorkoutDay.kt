@@ -20,8 +20,8 @@ import androidx.room.Relation
 )
 data class WorkoutDay(
     @PrimaryKey(autoGenerate = true) val workoutDayId:Long = 0,
-    val planId: Long,
-    val name: String
+    val planId: Long = 0,
+    val name: String = ""
     )
 
 data class WorkoutPlanWithDays(

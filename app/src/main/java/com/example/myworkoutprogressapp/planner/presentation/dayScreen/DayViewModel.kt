@@ -31,6 +31,7 @@ class DayViewModel @Inject constructor(
             emptyList())
 
     var plan = mutableStateOf(WorkoutPlan())
+        private set
 
 
     private var planId: Long = 0
@@ -49,10 +50,10 @@ class DayViewModel @Inject constructor(
 
 
     init{
-        savedStateHandle.get<Int>("planId")?.let{ planId ->
-            this.planId = planId.toLong()
+        savedStateHandle.get<Long>("planId")?.let{ planId ->
+            this.planId = planId
             viewModelScope.launch {
-                planUseCases.workoutDayCrud.getDays(planId.toLong())
+                planUseCases.workoutDayCrud.getDays(planId)
                     .collect{ days -> _daysFlow.value = days
                         if(plan.value.name.isBlank()){
                             plan.value = days.plan

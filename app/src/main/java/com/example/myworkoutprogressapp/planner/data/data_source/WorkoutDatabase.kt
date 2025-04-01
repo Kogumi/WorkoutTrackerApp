@@ -23,5 +23,5 @@ abstract class WorkoutDatabase: RoomDatabase() {
         const val DATABASE_NAME = "workout_db"
     }
     abstract fun workoutPlanDao(): WorkoutPlanDao
-    abstract fun workoutRoutineDao(): ExerciseDao
+    abstract fun exerciseDao(): ExerciseDao
 }

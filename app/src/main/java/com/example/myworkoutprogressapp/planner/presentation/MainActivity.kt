@@ -12,6 +12,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.myworkoutprogressapp.planner.presentation.exerciseListScreen.ExerciseListScreen
+import com.example.myworkoutprogressapp.planner.presentation.exerciseListScreen.ExerciseListViewModel
 import com.example.myworkoutprogressapp.planner.presentation.dayScreen.DayScreen
 import com.example.myworkoutprogressapp.planner.presentation.dayScreen.DayViewModel
 import com.example.myworkoutprogressapp.planner.presentation.planScreen.PlanScreen
@@ -39,20 +41,49 @@ class MainActivity : ComponentActivity() {
                                 viewModel = viewModel)
                         }
                         composable(
-                            route = Screen.DaysScreen.route +
-                                    "?planId={planId}",
+                            route = Screen.DaysScreen.route + "/{planId}",
                             arguments = listOf(
                                 navArgument(
                                     name = "planId"
                                 ){
-                                    type = NavType.IntType
-                                    defaultValue = 0
+                                    type = NavType.LongType
+                                    defaultValue = 0L
                                 }
                             )
                         ){
                             val viewModel = hiltViewModel<DayViewModel>()
                             DayScreen(navController = navController,
                                 viewModel = viewModel)
+                        }
+                        composable(
+                            route = Screen.ExerciseListScreen.route + "/{dayId}",
+                            arguments = listOf(
+                                navArgument(
+                                    name = "dayId"
+                                ){
+                                    type = NavType.LongType
+                                }
+                            )
+                        ){
+                            val viewModel = hiltViewModel<ExerciseListViewModel>()
+                            ExerciseListScreen(navController = navController,
+                                    viewModel = viewModel)
+                        }
+                        composable(
+                            route = Screen.ExerciseDetailsScreen.route + "/{dayId}/{exerciseId}",
+                            arguments = listOf(
+                                navArgument(
+                                    name = "dayId"
+                                ){
+                                    type = NavType.LongType
+                                },
+                                navArgument(
+                                    name = "exerciseId"
+                                ){
+                                    type = NavType.LongType
+                                }
+                            )
+                        ){
                         }
                     }
                 }

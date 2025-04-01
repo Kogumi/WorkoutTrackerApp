@@ -2,8 +2,6 @@ package com.example.myworkoutprogressapp.planner.presentation.dayScreen
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -22,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.myworkoutprogressapp.planner.presentation.components.CreationEditDialog
-import com.example.myworkoutprogressapp.planner.presentation.components.ListElement
+import com.example.myworkoutprogressapp.planner.presentation.components.GenericLazyList
 import com.example.myworkoutprogressapp.planner.presentation.util.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -101,22 +99,20 @@ fun DayScreen(
                     viewModel.onEvent(DayEvent.DismissDialog)}
             )
         }
-        LazyColumn(modifier = Modifier.padding(innerPadding)) {
-            items(dayList.value) { workoutDay ->
-                ListElement(
-                    text = workoutDay.name,
-                    id = workoutDay.workoutDayId,
-                    onDelete = {
-                        viewModel.onEvent(DayEvent.DeleteDay(workoutDay))
-                    },
-                    onEdit = {
-                        viewModel.onEvent(DayEvent.InvokeEdit(workoutDay))
-                    },
-                    onClick = {
-                        navController.navigate(Screen.DaysScreen.route + "?dayId=${workoutDay.workoutDayId}")
-                    }
-                )
-            }
-        }
+        GenericLazyList(
+            modifier = Modifier.padding(innerPadding),
+            items = dayList.value,
+            onDelete = { workoutDay ->
+                viewModel.onEvent(DayEvent.DeleteDay(workoutDay))
+            },
+            onEdit = { workoutDay ->
+                viewModel.onEvent(DayEvent.InvokeEdit(workoutDay))
+            },
+            onClick = { workoutDay ->
+                navController.navigate(Screen.ExerciseListScreen.route + "/${workoutDay.workoutDayId}" )
+            },
+            getName = { it.name },
+            getId = { it.workoutDayId }
+        )
     }
 }

@@ -5,6 +5,9 @@ import androidx.room.Room
 import com.example.myworkoutprogressapp.planner.data.repositories.WorkoutPlanRepository
 import com.example.myworkoutprogressapp.planner.data.data_source.WorkoutDatabase
 import com.example.myworkoutprogressapp.planner.data.repositories.ExerciseRepository
+import com.example.myworkoutprogressapp.planner.domain.useCases.exerciseCases.ExerciseCrud
+import com.example.myworkoutprogressapp.planner.domain.useCases.exerciseCases.ExerciseListCrud
+import com.example.myworkoutprogressapp.planner.domain.useCases.exerciseCases.ExerciseUseCases
 import com.example.myworkoutprogressapp.planner.domain.useCases.workoutPlanCases.WorkoutPlanCrud
 import com.example.myworkoutprogressapp.planner.domain.useCases.workoutPlanCases.WorkoutDayCrud
 import com.example.myworkoutprogressapp.planner.domain.useCases.workoutPlanCases.WorkoutPlanUseCases
@@ -31,16 +34,31 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideWorkoutRoutineRepository(db: WorkoutDatabase): WorkoutPlanRepository {
+    fun provideWorkoutPlanRepository(db: WorkoutDatabase): WorkoutPlanRepository {
         return WorkoutPlanRepository(db.workoutPlanDao())
     }
 
     @Provides
     @Singleton
-    fun provideUseCases(repository: WorkoutPlanRepository): WorkoutPlanUseCases{
+    fun providePlanUseCases(repository: WorkoutPlanRepository): WorkoutPlanUseCases{
         return WorkoutPlanUseCases(
             WorkoutPlanCrud(repository),
             WorkoutDayCrud(repository)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideExerciseRepository(db: WorkoutDatabase): ExerciseRepository{
+        return ExerciseRepository(db.exerciseDao())
+    }
+
+    @Provides
+    @Singleton
+    fun provideExerciseUseCases(repository: ExerciseRepository): ExerciseUseCases{
+        return ExerciseUseCases(
+            ExerciseListCrud(repository),
+            ExerciseCrud()
         )
     }
 
