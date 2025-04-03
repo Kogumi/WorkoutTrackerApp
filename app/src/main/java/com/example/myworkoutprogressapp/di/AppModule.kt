@@ -58,7 +58,7 @@ class AppModule {
     fun provideExerciseUseCases(repository: ExerciseRepository): ExerciseUseCases{
         return ExerciseUseCases(
             ExerciseListCrud(repository),
-            ExerciseCrud()
+            ExerciseCrud(repository)
         )
     }
 

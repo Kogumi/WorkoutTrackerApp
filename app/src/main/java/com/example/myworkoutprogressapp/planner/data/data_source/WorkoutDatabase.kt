@@ -16,7 +16,7 @@ import com.example.myworkoutprogressapp.planner.domain.model.WorkoutSet
     WorkoutPlan::class,
     WorkoutDayExercise::class,
     WorkoutSet::class
-], version = 2,
+], version = 3,
     exportSchema = false)
 abstract class WorkoutDatabase: RoomDatabase() {
     companion object{

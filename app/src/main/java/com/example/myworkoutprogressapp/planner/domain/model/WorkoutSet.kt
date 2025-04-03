@@ -1,5 +1,6 @@
 package com.example.myworkoutprogressapp.planner.domain.model
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.CASCADE
@@ -18,10 +19,16 @@ import androidx.room.PrimaryKey
 
 data class WorkoutSet(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val workoutDayId: Long,
-    val exerciseId: Long,
-    val setNumber: Int,
-    val targetRepsMin: Int,
-    val targetRepsMax: Int,
+    val workoutDayId: Long = 0,
+    val exerciseId: Long = 0,
+    val setNumber: Int = 0,
+    @Embedded
+    val repRange: RepRange = RepRange(),
     val targetWeight: Float = 0f,
+)
+
+
+data class RepRange(
+    val min: Int = 0,
+    val max: Int = 0
 )

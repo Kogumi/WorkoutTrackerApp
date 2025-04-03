@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.Flow
 interface ExerciseDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun addSetToExercise(item: WorkoutSet): Long
+    suspend fun addSetToExercise(item: List<WorkoutSet>)
 
     @Update
     suspend fun updateWorkoutSet(item: WorkoutSet)
@@ -26,8 +26,8 @@ interface ExerciseDao {
     suspend fun deleteSetFromExercise(item: WorkoutSet)
 
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun addExercise(item: Exercise)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addExercise(item: Exercise): Long
 
     @Update
     suspend fun updateExercise(item: Exercise)
@@ -49,4 +49,29 @@ interface ExerciseDao {
     @Transaction
     @Query("SELECT * from workout_days where workoutDayId = :dayId")
     fun getExercisesForDay(dayId: Long): Flow<DayWithExercises>
+
+    @Transaction
+    suspend fun addExerciseToWorkout(
+        exercise: Exercise,
+        workoutDayId: Long,
+        sets: List<WorkoutSet>
+    ){
+        val exerciseId = addExercise(exercise).takeIf{ it != -1L } ?: exercise.exerciseId
+        addExerciseToDay(
+            WorkoutDayExercise(
+                workoutDayId = workoutDayId,
+                exerciseId = exerciseId
+            )
+        )
+        val setsToInsert = sets.mapIndexed { index, set ->
+            set.copy(
+                workoutDayId = workoutDayId,
+                exerciseId = exerciseId,
+                setNumber = index + 1
+            )
+        }
+        addSetToExercise(setsToInsert)
+
+
+    }
 }
